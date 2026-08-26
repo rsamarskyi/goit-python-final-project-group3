@@ -75,7 +75,7 @@ def print_all_contacts(book: AddressBook):
         print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + "No contacts found." + Style.RESET_ALL)
         return
     for record in book.values():
-        print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + f"{record.name}: {', '.join(str(phone) for phone in record.phones)}" + Style.RESET_ALL)
+        print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + str(record) + Style.RESET_ALL)
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -102,6 +102,30 @@ def change_contact(args, book: AddressBook):
         return "Contact not found."
     else:
         raise ChangeError()
+
+@input_error
+def add_email(args, book):
+    if len(args) != 2:
+        return "Please provide both name and e-mail."
+    name, email = args
+    record = book.find(name.capitalize())
+    if record:
+        record.add_email(email)
+        return "E-mail added."
+    return "Contact not found."
+
+@input_error
+def add_address(args, book):
+    if len(args) < 2:
+        return "Please provide both name and address."
+    name = args[0]
+    address = " ".join(args[1:])
+    
+    record = book.find(name.capitalize())
+    if record:
+        record.add_address(address)
+        return "Address added."
+    return "Contact not found."
 
 def save_data(book, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
