@@ -1,5 +1,5 @@
-from datetime import datetime
 from collections import UserDict
+from datetime import datetime
 
 from decorators import BirthdayError, PhoneError
 
@@ -11,17 +11,18 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
-    def __init__(self, value):
-            self.value = value
+    pass
+
 
 class Email(Field):
-    def __init__(self, value):
-        self.value = value
+    pass
+
 
 class Address(Field):
-    def __init__(self, value):
-        self.value = value
+    pass
+
 
 class Phone(Field):
     def __init__(self, value):
@@ -29,13 +30,15 @@ class Phone(Field):
             raise PhoneError("Phone number must contain exactly 10 digits")
         super().__init__(value)
 
+
 class Birthday(Field):
     def __init__(self, value):
         try:
-            birthday_date = datetime.strptime(value, '%d.%m.%Y')
+            birthday_date = datetime.strptime(value, "%d.%m.%Y")
         except ValueError:
             raise BirthdayError("Invalid date format. Use DD.MM.YYYY")
         super().__init__(birthday_date)
+
 
 class Record:
     def __init__(self, name):
@@ -46,13 +49,12 @@ class Record:
         self.address = None
 
     def __str__(self):
-        return (
-            f"Contact name: {self.name.value}, "
-            f"phones: {'; '.join(p.value for p in self.phones)}, "
-            f"birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}, "
-            f"e-mail: {self.email.value if self.email else 'N/A'}, "
-            f"address: {self.address.value if self.address else 'N/A'}"
-)
+        return f"""Contact name: {self.name.value},
+        phones: {'; '.join(p.value for p in self.phones)},
+        birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}
+        e-mail: {self.email.value if self.email else 'N/A'},
+        address: {self.address.value if self.address else 'N/A'}"""
+
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
 
@@ -118,9 +120,11 @@ class AddressBook(UserDict):
             if days_after is None and not 0 <= delta_days < 7:
                 continue
 
-            upcoming_birthdays.append({
-                "name": user.name.value,
-                "birthday_date": birthday_this_year.strftime("%d.%m.%Y")
-            })
+            upcoming_birthdays.append(
+                {
+                    "name": user.name.value,
+                    "birthday_date": birthday_this_year.strftime("%d.%m.%Y"),
+                }
+            )
 
         return upcoming_birthdays
