@@ -1,14 +1,15 @@
-from colorama import Fore, Style, just_fix_windows_console
 import pickle
 
 from address_book import AddressBook, Record
-from decorators import input_error, PhoneError, ChangeError
+from colorama import Fore, Style, just_fix_windows_console
+from decorators import ChangeError, PhoneError, input_error
 
-# Initialisation colorama
+# Initialization colorama
 just_fix_windows_console()
 
 BOT_ANSWER_COLOR = Fore.LIGHTRED_EX + Style.BRIGHT
 BOT_ANSWER_PREFIX = "  - "  # small visible prefix used by main.py
+
 
 def parse_input(user_input):
     parts = user_input.split()
@@ -18,11 +19,12 @@ def parse_input(user_input):
     cmd = cmd.strip().lower()
     return (cmd, *args)
 
+
 @input_error
 def add_contact(args, book: AddressBook):
     name, phone = args
 
-    #Validate phone number length before adding to the record, next validation will be done in the Phone class
+    # Validate phone number length before adding to the record, next validation will be done in the Phone class
     if len(phone) != 10:
         raise PhoneError("Phone number must contain exactly 10 digits")
 
@@ -36,6 +38,7 @@ def add_contact(args, book: AddressBook):
         record.add_phone(phone)
     return message
 
+
 @input_error
 def show_phone(args, book: AddressBook):
     name = args[0]
@@ -43,6 +46,7 @@ def show_phone(args, book: AddressBook):
     if record:
         return f"{name}: {', '.join(str(phone) for phone in record.phones)}"
     return "Contact not found."
+
 
 @input_error
 def add_birthday(args, book):
@@ -55,6 +59,7 @@ def add_birthday(args, book):
         return "Birthday added."
     return "Contact not found."
 
+
 @input_error
 def show_birthday(args, book):
     name = args[0]
@@ -63,19 +68,34 @@ def show_birthday(args, book):
         return f"{name.capitalize()}'s birthday is {record.birthday.value.date().strftime('%d.%m.%Y')}."
     return "Contact not found or birthday not specified."
 
+
 @input_error
 def birthdays(book):
     birthdays_list = book.get_upcoming_birthdays()
     if not birthdays_list:
         return "No upcoming birthdays."
-    return "Upcoming birthdays:\n" + "\n".join(f"{item['name']}: {item['congratulation_date']}" for item in birthdays_list)
+    return "Upcoming birthdays:\n" + "\n".join(
+        f"{item['name']}: {item['congratulation_date']}" for item in birthdays_list
+    )
+
 
 def print_all_contacts(book: AddressBook):
     if len(book) == 0:
-        print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + "No contacts found." + Style.RESET_ALL)
+        print(
+            BOT_ANSWER_PREFIX
+            + BOT_ANSWER_COLOR
+            + "No contacts found."
+            + Style.RESET_ALL
+        )
         return
     for record in book.values():
-        print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + f"{record.name}: {', '.join(str(phone) for phone in record.phones)}" + Style.RESET_ALL)
+        print(
+            BOT_ANSWER_PREFIX
+            + BOT_ANSWER_COLOR
+            + f"{record.name}: {', '.join(str(phone) for phone in record.phones)}"
+            + Style.RESET_ALL
+        )
+
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -103,9 +123,11 @@ def change_contact(args, book: AddressBook):
     else:
         raise ChangeError()
 
+
 def save_data(book, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(book, f)
+
 
 def load_data(filename="addressbook.pkl"):
     try:
@@ -113,3 +135,20 @@ def load_data(filename="addressbook.pkl"):
             return pickle.load(f)
     except FileNotFoundError:
         return AddressBook()
+
+
+# from email_validator import validate_email, EmailNotValidError
+#
+# email = "user@example.com"
+#
+# try:
+#     # Validates syntax and checks if domain MX records exist
+#     email_info = validate_email(email, check_deliverability=True)
+#
+#     # Normalized form (e.g., lowercase domain)
+#     normalized_email = email_info.normalized
+#     print(f"Valid email: {normalized_email}")
+#
+# except EmailNotValidError as e:
+#     # Catches syntax errors, bad domains, or missing MX records
+#     print(f"Invalid email: {str(e)}")

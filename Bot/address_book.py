@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 from collections import UserDict
+from datetime import datetime, timedelta
 
 from decorators import BirthdayError, PhoneError
 
@@ -11,8 +11,10 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
     pass
+
 
 class Phone(Field):
     def __init__(self, value):
@@ -20,13 +22,15 @@ class Phone(Field):
             raise PhoneError("Phone number must contain exactly 10 digits")
         super().__init__(value)
 
+
 class Birthday(Field):
     def __init__(self, value):
         try:
-            birthday_date = datetime.strptime(value, '%d.%m.%Y')
+            birthday_date = datetime.strptime(value, "%d.%m.%Y")
         except ValueError:
             raise BirthdayError("Invalid date format. Use DD.MM.YYYY")
         super().__init__(birthday_date)
+
 
 class Record:
     def __init__(self, name):
@@ -98,9 +102,11 @@ class AddressBook(UserDict):
                 elif congratulation_date.weekday() == 6:  # неділя
                     congratulation_date += timedelta(days=1)
 
-                upcoming_birthdays.append({
-                    "name": user.name.value,
-                    "congratulation_date": congratulation_date.strftime("%d.%m.%Y")
-                })
+                upcoming_birthdays.append(
+                    {
+                        "name": user.name.value,
+                        "congratulation_date": congratulation_date.strftime("%d.%m.%Y"),
+                    }
+                )
 
         return upcoming_birthdays
