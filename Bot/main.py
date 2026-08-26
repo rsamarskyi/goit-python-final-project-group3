@@ -1,5 +1,18 @@
-from help_functions import parse_input, add_contact, show_phone, print_all_contacts, change_contact, add_birthday, \
-    show_birthday, birthdays, load_data, save_data, add_email, add_address
+from help_functions import (
+    parse_input,
+    add_contact,
+    show_phone,
+    print_all_contacts,
+    change_contact,
+    add_birthday,
+    show_birthday,
+    birthdays,
+    load_data,
+    save_data,
+    add_email,
+    add_address,
+    find_contact,
+)
 from colorama import Fore, Style, just_fix_windows_console
 
 # Initialisation colorama
@@ -8,12 +21,15 @@ just_fix_windows_console()
 BOT_SHELL_COLOR = Fore.LIGHTYELLOW_EX + Style.BRIGHT
 BOT_ANSWER_COLOR = "  - " + Fore.LIGHTRED_EX + Style.BRIGHT
 
+
 def main() -> None:
     book = load_data()
     print(BOT_SHELL_COLOR + "Hello, I am a console assistant!")
 
     while True:
-        command, *args = parse_input(input(BOT_SHELL_COLOR + "Enter a command: " + Style.RESET_ALL))
+        command, *args = parse_input(
+            input(BOT_SHELL_COLOR + "Enter a command: " + Style.RESET_ALL)
+        )
         match command:
             case "close" | "exit":
                 print(BOT_ANSWER_COLOR + "Good bye!" + Style.RESET_ALL)

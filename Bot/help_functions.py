@@ -28,13 +28,39 @@ def add_contact(args, book: AddressBook):
     if len(phone) != 10:
         raise PhoneError("Phone number must contain exactly 10 digits")
 
-    record = book.find(name)
+    record = book.find(name.capitalize())
     message = "Contact updated."
+
     if record is None:
         record = Record(name.capitalize())
         book.add_record(record)
+        record.add_phone(phone)
+
+        add_contact_email = input(
+            BOT_ANSWER_COLOR + " Add e-mail? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_email.lower() == "y":
+            email = input(BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL)
+            record.add_email(email)
+
+        add_contact_address = input(
+            BOT_ANSWER_COLOR + " Add address? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_address.lower() == "y":
+            address = input(BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL)
+            record.add_address(address)
+
+        add_contact_birthday = input(
+            BOT_ANSWER_COLOR + " Add birthday? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_birthday.lower() == "y":
+            birthday = input(
+                BOT_ANSWER_COLOR + "  Enter birthday (DD.MM.YYYY): " + Style.RESET_ALL
+            )
+            record.add_birthday(birthday)
+
         message = "Contact added."
-    if phone:
+    else:
         record.add_phone(phone)
     return message
 
@@ -51,7 +77,7 @@ def show_phone(args, book: AddressBook):
 @input_error
 def find_contact(args, book: AddressBook):
     name = args[0]
-    record= book.find(name.capitalize())
+    record = book.find(name.capitalize())
     if record:
         return f"{record}"
     return "Contact not found."
@@ -105,6 +131,7 @@ def birthdays(args, book):
         f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
     )
 
+
 def print_all_contacts(book: AddressBook):
     if len(book) == 0:
         print(
@@ -116,6 +143,7 @@ def print_all_contacts(book: AddressBook):
         return
     for record in book.values():
         print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + str(record) + Style.RESET_ALL)
+
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -143,6 +171,7 @@ def change_contact(args, book: AddressBook):
     else:
         raise ChangeError()
 
+
 @input_error
 def add_email(args, book):
     if len(args) != 2:
@@ -153,6 +182,7 @@ def add_email(args, book):
         record.add_email(email)
         return "E-mail added."
     return "Contact not found."
+
 
 @input_error
 def add_address(args, book):
@@ -166,6 +196,7 @@ def add_address(args, book):
         record.add_address(address)
         return "Address added."
     return "Contact not found."
+
 
 def save_data(book, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
