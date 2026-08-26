@@ -12,7 +12,16 @@ class Field:
         return str(self.value)
 
 class Name(Field):
-    pass
+    def __init__(self, value):
+            self.value = value
+
+class Email(Field):
+    def __init__(self, value):
+        self.value = value
+
+class Address(Field):
+    def __init__(self, value):
+        self.value = value
 
 class Phone(Field):
     def __init__(self, value):
@@ -33,10 +42,17 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}, birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}"
-
+        return (
+            f"Contact name: {self.name.value}, "
+            f"phones: {'; '.join(p.value for p in self.phones)}, "
+            f"birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}, "
+            f"e-mail: {self.email.value if self.email else 'N/A'}, "
+            f"address: {self.address.value if self.address else 'N/A'}"
+)
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
 
@@ -54,6 +70,12 @@ class Record:
 
     def add_birthday(self, birthday):
         self.birthday = Birthday(birthday)
+
+    def add_email(self, email):
+        self.email = Email(email)
+
+    def add_address(self, address):
+        self.address = Address(address)
 
 
 class AddressBook(UserDict):
