@@ -70,14 +70,31 @@ def show_birthday(args, book):
 
 
 @input_error
-def birthdays(book):
-    birthdays_list = book.get_upcoming_birthdays()
-    if not birthdays_list:
-        return "No upcoming birthdays."
-    return "Upcoming birthdays:\n" + "\n".join(
-        f"{item['name']}: {item['congratulation_date']}" for item in birthdays_list
-    )
+def birthdays(args, book):
+    if len(args) > 1:
+        return "Please provide only one number of days, for example: birthdays 3."
 
+    days_after = None
+    if args:
+        try:
+            days_after = int(args[0])
+        except ValueError:
+            return "The number of days must be a non-negative integer."
+        if days_after < 0:
+            return "The number of days must be a non-negative integer."
+
+    birthdays_list = book.get_upcoming_birthdays(days_after)
+    if not birthdays_list:
+        if days_after is None:
+            return "No upcoming birthdays."
+        return f"No birthdays in {days_after} day(s)."
+    if days_after is None:
+        return "Upcoming birthdays:\n" + "\n".join(
+            f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
+        )
+    return f"Birthdays in {days_after} day(s):\n" + "\n".join(
+        f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
+    )
 
 def print_all_contacts(book: AddressBook):
     if len(book) == 0:
@@ -89,13 +106,7 @@ def print_all_contacts(book: AddressBook):
         )
         return
     for record in book.values():
-        print(
-            BOT_ANSWER_PREFIX
-            + BOT_ANSWER_COLOR
-            + f"{record.name}: {', '.join(str(phone) for phone in record.phones)}"
-            + Style.RESET_ALL
-        )
-
+        print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + str(record) + Style.RESET_ALL)
 
 @input_error
 def change_contact(args, book: AddressBook):
@@ -123,6 +134,29 @@ def change_contact(args, book: AddressBook):
     else:
         raise ChangeError()
 
+@input_error
+def add_email(args, book):
+    if len(args) != 2:
+        return "Please provide both name and e-mail."
+    name, email = args
+    record = book.find(name.capitalize())
+    if record:
+        record.add_email(email)
+        return "E-mail added."
+    return "Contact not found."
+
+@input_error
+def add_address(args, book):
+    if len(args) < 2:
+        return "Please provide both name and address."
+    name = args[0]
+    address = " ".join(args[1:])
+
+    record = book.find(name.capitalize())
+    if record:
+        record.add_address(address)
+        return "Address added."
+    return "Contact not found."
 
 def save_data(book, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
