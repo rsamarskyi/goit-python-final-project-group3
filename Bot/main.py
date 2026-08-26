@@ -6,6 +6,8 @@ from help_functions import (
     add_email,
     birthdays,
     change_contact,
+    delete_contact,
+    edit_contact,
     find_contact,
     load_data,
     parse_input,
@@ -45,6 +47,10 @@ def main() -> None:
                 print(BOT_ANSWER_COLOR + show_phone(args, book) + Style.RESET_ALL)
             case "find":
                 print(BOT_ANSWER_COLOR + find_contact(args, book) + Style.RESET_ALL)
+            case "delete":
+                print(BOT_ANSWER_COLOR + delete_contact(args, book) + Style.RESET_ALL)
+            case "edit":
+                print(BOT_ANSWER_COLOR + edit_contact(args, book) + Style.RESET_ALL)
             case "add-birthday":
                 print(BOT_ANSWER_COLOR + add_birthday(args, book) + Style.RESET_ALL)
             case "show-birthday":

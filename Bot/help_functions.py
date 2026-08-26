@@ -84,6 +84,55 @@ def find_contact(args, book: AddressBook):
 
 
 @input_error
+def delete_contact(args, book: AddressBook):
+    if len(args) != 1:
+        return "Please provide a contact name, for example: delete Alice."
+
+    name = args[0].capitalize()
+    if not book.find(name):
+        return "Contact not found."
+
+    book.delete(name)
+    return "Contact deleted."
+
+
+@input_error
+def edit_contact(args, book: AddressBook):
+    if len(args) < 3:
+        return "Please provide name, field and new value, for example: edit Alice -phone 0123456789."
+
+    name, field = args[0], args[1].lower()
+    if field not in {"-phone", "-birthday", "-email", "-address"}:
+        return "Field must be -phone, -birthday, -email or -address."
+
+    record = book.find(name.capitalize())
+    if not record:
+        return "Contact not found."
+
+    if field == "-phone":
+        if len(args) != 4 or not args[2] or not args[3]:
+            return "Use: edit Alice -phone <old value> <new value>."
+        old_phone, new_phone = args[2], args[3]
+        if not record.find_phone(old_phone):
+            return "Old phone number not found. Nothing was changed."
+        record.edit_phone(old_phone, new_phone)
+        return "Contact updated."
+
+    new_value = " ".join(args[2:]).strip()
+    if not new_value:
+        return "New value cannot be empty. Nothing was changed."
+
+    if field == "-birthday":
+        record.add_birthday(new_value)
+    elif field == "-email":
+        record.add_email(new_value)
+    else:
+        record.add_address(new_value)
+
+    return "Contact updated."
+
+
+@input_error
 def add_birthday(args, book):
     if len(args) != 2:
         return "Please provide both name and birthday (DD.MM.YYYY)."
