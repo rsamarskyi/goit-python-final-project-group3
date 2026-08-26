@@ -4,7 +4,7 @@ from address_book import AddressBook, Record
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
 
-# Initialisation colorama
+# Initialization colorama
 just_fix_windows_console()
 
 BOT_ANSWER_COLOR = Fore.LIGHTRED_EX + Style.BRIGHT

@@ -1,19 +1,19 @@
-from help_functions import (
-    parse_input,
-    add_contact,
-    show_phone,
-    print_all_contacts,
-    change_contact,
-    add_birthday,
-    show_birthday,
-    birthdays,
-    load_data,
-    save_data,
-    add_email,
-    add_address,
-    find_contact,
-)
 from colorama import Fore, Style, just_fix_windows_console
+from help_functions import (
+    add_address,
+    add_birthday,
+    add_contact,
+    add_email,
+    birthdays,
+    change_contact,
+    find_contact,
+    load_data,
+    parse_input,
+    print_all_contacts,
+    save_data,
+    show_birthday,
+    show_phone,
+)
 
 # Initialisation colorama
 just_fix_windows_console()

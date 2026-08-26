@@ -2,6 +2,7 @@ from collections import UserDict
 from datetime import datetime
 
 from decorators import BirthdayError, PhoneError
+from email_validator import EmailNotValidError, validate_email
 
 
 class Field:
@@ -17,7 +18,18 @@ class Name(Field):
 
 
 class Email(Field):
-    pass
+    def __init__(self, email_value):
+        try:
+            # Validates syntax and checks if domain MX records exist
+            email_info = validate_email(email_value, check_deliverability=True)
+
+            # Normalized form (e.g., lowercase domain)
+            normalized_email = email_info.normalized
+
+        except EmailNotValidError:
+            # Catches syntax errors, bad domains, or missing MX records
+            raise EmailNotValidError
+        super().__init__(normalized_email)
 
 
 class Address(Field):
@@ -50,10 +62,10 @@ class Record:
 
     def __str__(self):
         return f"""Contact name: {self.name.value},
-        phones: {'; '.join(p.value for p in self.phones)},
-        birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}
-        e-mail: {self.email.value if self.email else 'N/A'},
-        address: {self.address.value if self.address else 'N/A'}"""
+        phones: {"; ".join(p.value for p in self.phones)},
+        birthday: {self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"}
+        e-mail: {self.email.value if self.email else "N/A"},
+        address: {self.address.value if self.address else "N/A"}"""
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -81,7 +93,6 @@ class Record:
 
 
 class AddressBook(UserDict):
-
     def add_record(self, record):
         self.data[record.name.value] = record
 
