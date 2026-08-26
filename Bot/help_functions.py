@@ -64,11 +64,23 @@ def show_birthday(args, book):
     return "Contact not found or birthday not specified."
 
 @input_error
-def birthdays(book):
-    birthdays_list = book.get_upcoming_birthdays()
+def birthdays(args, book):
+    if len(args) != 1:
+        return "Please provide the number of days after today, for example: birthdays 3."
+
+    try:
+        days_after = int(args[0])
+    except ValueError:
+        return "The number of days must be a non-negative integer."
+    if days_after < 0:
+        return "The number of days must be a non-negative integer."
+
+    birthdays_list = book.get_upcoming_birthdays(days_after)
     if not birthdays_list:
-        return "No upcoming birthdays."
-    return "Upcoming birthdays:\n" + "\n".join(f"{item['name']}: {item['congratulation_date']}" for item in birthdays_list)
+        return f"No birthdays in {days_after} day(s)."
+    return f"Birthdays in {days_after} day(s):\n" + "\n".join(
+        f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
+    )
 
 def print_all_contacts(book: AddressBook):
     if len(book) == 0:

@@ -32,7 +32,7 @@ def main() -> None:
             case "show-birthday":
                 print(BOT_ANSWER_COLOR + show_birthday(args, book) + Style.RESET_ALL)
             case "birthdays":
-                print(BOT_ANSWER_COLOR + birthdays(book) + Style.RESET_ALL)
+                print(BOT_ANSWER_COLOR + birthdays(args, book) + Style.RESET_ALL)
             case "all":
                 if len(book):
                     print(BOT_ANSWER_COLOR + "All contacts:" + Style.RESET_ALL)
