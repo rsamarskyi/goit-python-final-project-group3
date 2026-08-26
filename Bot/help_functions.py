@@ -65,19 +65,27 @@ def show_birthday(args, book):
 
 @input_error
 def birthdays(args, book):
-    if len(args) != 1:
-        return "Please provide the number of days after today, for example: birthdays 3."
+    if len(args) > 1:
+        return "Please provide only one number of days, for example: birthdays 3."
 
-    try:
-        days_after = int(args[0])
-    except ValueError:
-        return "The number of days must be a non-negative integer."
-    if days_after < 0:
-        return "The number of days must be a non-negative integer."
+    days_after = None
+    if args:
+        try:
+            days_after = int(args[0])
+        except ValueError:
+            return "The number of days must be a non-negative integer."
+        if days_after < 0:
+            return "The number of days must be a non-negative integer."
 
     birthdays_list = book.get_upcoming_birthdays(days_after)
     if not birthdays_list:
+        if days_after is None:
+            return "No upcoming birthdays."
         return f"No birthdays in {days_after} day(s)."
+    if days_after is None:
+        return "Upcoming birthdays:\n" + "\n".join(
+            f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
+        )
     return f"Birthdays in {days_after} day(s):\n" + "\n".join(
         f"{item['name']}: {item['birthday_date']}" for item in birthdays_list
     )

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import UserDict
 
 from decorators import BirthdayError, PhoneError
@@ -96,18 +96,9 @@ class AddressBook(UserDict):
             if days_after is None and not 0 <= delta_days < 7:
                 continue
 
-            congratulation_date = birthday_this_year
-
-            # Move weekend congratulations to the next working day.
-            if congratulation_date.weekday() == 5:
-                congratulation_date += timedelta(days=2)
-            elif congratulation_date.weekday() == 6:
-                congratulation_date += timedelta(days=1)
-
             upcoming_birthdays.append({
                 "name": user.name.value,
-                "birthday_date": birthday_this_year.strftime("%d.%m.%Y"),
-                "congratulation_date": congratulation_date.strftime("%d.%m.%Y")
+                "birthday_date": birthday_this_year.strftime("%d.%m.%Y")
             })
 
         return upcoming_birthdays
