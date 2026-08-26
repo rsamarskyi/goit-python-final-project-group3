@@ -1,6 +1,8 @@
 from functools import wraps
 from textwrap import dedent
 
+from email_validator import EmailNotValidError
+
 
 # Error handlers for custom exceptions used in the Birthday and Phone classes
 class BirthdayError(Exception):
@@ -22,6 +24,9 @@ def input_error(func):
             return func(*args, **kwargs)
         except KeyError:
             return "Enter user name."
+        except EmailNotValidError as e:
+            # return error msg from EmailNotValidError exception set in the Email class
+            return f"Invalid email: {str(e)}"
         except ValueError:
             return "Give me name and phone (10 digits) please."
         except IndexError:

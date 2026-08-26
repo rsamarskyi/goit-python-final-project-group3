@@ -209,20 +209,3 @@ def load_data(filename="addressbook.pkl"):
             return pickle.load(f)
     except FileNotFoundError:
         return AddressBook()
-
-
-# from email_validator import validate_email, EmailNotValidError
-#
-# email = "user@example.com"
-#
-# try:
-#     # Validates syntax and checks if domain MX records exist
-#     email_info = validate_email(email, check_deliverability=True)
-#
-#     # Normalized form (e.g., lowercase domain)
-#     normalized_email = email_info.normalized
-#     print(f"Valid email: {normalized_email}")
-#
-# except EmailNotValidError as e:
-#     # Catches syntax errors, bad domains, or missing MX records
-#     print(f"Invalid email: {str(e)}")
