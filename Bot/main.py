@@ -1,5 +1,5 @@
 from help_functions import parse_input, add_contact, show_phone, print_all_contacts, change_contact, add_birthday, \
-    show_birthday, birthdays, load_data, save_data, find_contact
+    show_birthday, birthdays, load_data, save_data, add_email, add_address
 from colorama import Fore, Style, just_fix_windows_console
 
 # Initialisation colorama
@@ -34,7 +34,11 @@ def main() -> None:
             case "show-birthday":
                 print(BOT_ANSWER_COLOR + show_birthday(args, book) + Style.RESET_ALL)
             case "birthdays":
-                print(BOT_ANSWER_COLOR + birthdays(book) + Style.RESET_ALL)
+                print(BOT_ANSWER_COLOR + birthdays(args, book) + Style.RESET_ALL)
+            case "email":
+                print(BOT_ANSWER_COLOR + add_email(args, book) + Style.RESET_ALL)
+            case "address":
+                print(BOT_ANSWER_COLOR + add_address(args, book) + Style.RESET_ALL)
             case "all":
                 if len(book):
                     print(BOT_ANSWER_COLOR + "All contacts:" + Style.RESET_ALL)

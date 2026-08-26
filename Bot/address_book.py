@@ -1,3 +1,4 @@
+from datetime import datetime
 from collections import UserDict
 from datetime import datetime, timedelta
 
@@ -13,7 +14,16 @@ class Field:
 
 
 class Name(Field):
-    pass
+    def __init__(self, value):
+            self.value = value
+
+class Email(Field):
+    def __init__(self, value):
+        self.value = value
+
+class Address(Field):
+    def __init__(self, value):
+        self.value = value
 
 
 class Phone(Field):
@@ -37,12 +47,21 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
 
     def __str__(self):
         return f'''Contact name: {self.name.value},
         phones: {'; '.join(p.value for p in self.phones)},
         birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}'''
 
+        return (
+            f"Contact name: {self.name.value}, "
+            f"phones: {'; '.join(p.value for p in self.phones)}, "
+            f"birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'N/A'}, "
+            f"e-mail: {self.email.value if self.email else 'N/A'}, "
+            f"address: {self.address.value if self.address else 'N/A'}"
+)
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
 
@@ -61,6 +80,12 @@ class Record:
     def add_birthday(self, birthday):
         self.birthday = Birthday(birthday)
 
+    def add_email(self, email):
+        self.email = Email(email)
+
+    def add_address(self, address):
+        self.address = Address(address)
+
 
 class AddressBook(UserDict):
 
@@ -74,7 +99,7 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_upcoming_birthdays(self):
+    def get_upcoming_birthdays(self, days_after=None):
         today = datetime.today().date()
         upcoming_birthdays = []
         users = self.data.values()
@@ -94,21 +119,17 @@ class AddressBook(UserDict):
             # get delta from birthday and nowadays
             delta_days = (birthday_this_year - today).days
 
-            # checking birthday upcoming next 7 days include today
-            if 0 <= delta_days < 7:
-                congratulation_date = birthday_this_year
+            # With an offset, return birthdays on that exact calendar day.
+            if days_after is not None and delta_days != days_after:
+                continue
 
-                # checking birthday is on weekend and replace congratulation date on next working day
-                if congratulation_date.weekday() == 5:  # субота
-                    congratulation_date += timedelta(days=2)
-                elif congratulation_date.weekday() == 6:  # неділя
-                    congratulation_date += timedelta(days=1)
+            # Without an offset, return birthdays in the next 7 days including today.
+            if days_after is None and not 0 <= delta_days < 7:
+                continue
 
-                upcoming_birthdays.append(
-                    {
-                        "name": user.name.value,
-                        "congratulation_date": congratulation_date.strftime("%d.%m.%Y"),
-                    }
-                )
+            upcoming_birthdays.append({
+                "name": user.name.value,
+                "birthday_date": birthday_this_year.strftime("%d.%m.%Y")
+            })
 
         return upcoming_birthdays
