@@ -37,4 +37,5 @@ BOT_COMMANDS_LIST = [
         "description": "Add address for a contact",
     },
     {"name": "all", "usage": "all", "description": "Show all contacts"},
+    {"name": "close or exit", "usage": "close", "description": "Close the application"},
 ]
