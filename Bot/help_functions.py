@@ -1,8 +1,10 @@
 import pickle
 
 from address_book import AddressBook, Record
+from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
+from tabulate import tabulate
 
 # Initialization colorama
 just_fix_windows_console()
@@ -209,3 +211,7 @@ def load_data(filename="addressbook.pkl"):
             return pickle.load(f)
     except FileNotFoundError:
         return AddressBook()
+
+
+def print_all_commands():
+    print(tabulate(BOT_COMMANDS_LIST, headers="keys"))
