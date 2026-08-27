@@ -41,8 +41,6 @@ def main() -> None:
                 print(BOT_ANSWER_COLOR + "How can I help you?" + Style.RESET_ALL)
             case "add":
                 print(BOT_ANSWER_COLOR + add_contact(args, book) + Style.RESET_ALL)
-            case "change":
-                print(BOT_ANSWER_COLOR + change_contact(args, book) + Style.RESET_ALL)
             case "phone":
                 print(BOT_ANSWER_COLOR + show_phone(args, book) + Style.RESET_ALL)
             case "find":
