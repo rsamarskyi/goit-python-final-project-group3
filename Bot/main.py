@@ -4,13 +4,18 @@ from help_functions import (
     add_birthday,
     add_contact,
     add_email,
+    add_note,
     birthdays,
     change_contact,
+    delete_note,
+    edit_note,
     find_contact,
     load_data,
     parse_input,
     print_all_contacts,
     save_data,
+    search_note_by_id,
+    search_notes,
     show_birthday,
     show_phone,
 )
@@ -59,6 +64,16 @@ def main() -> None:
                 if len(book):
                     print(BOT_ANSWER_COLOR + "All contacts:" + Style.RESET_ALL)
                 print_all_contacts(book)
+            case "add-note":
+                print(BOT_ANSWER_COLOR + add_note(args, book) + Style.RESET_ALL)
+            case "edit-note":
+                print(BOT_ANSWER_COLOR + edit_note(args, book) + Style.RESET_ALL)
+            case "delete-note":
+                print(BOT_ANSWER_COLOR + delete_note(args, book) + Style.RESET_ALL)
+            case "show-note":
+                print(BOT_ANSWER_COLOR + search_note_by_id(args, book) + Style.RESET_ALL)
+            case "search-notes":
+                print(BOT_ANSWER_COLOR + search_notes(args, book) + Style.RESET_ALL)
             case _:
                 print(BOT_ANSWER_COLOR + "Invalid command." + Style.RESET_ALL)
 

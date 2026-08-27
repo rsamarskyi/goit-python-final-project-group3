@@ -16,6 +16,8 @@ class PhoneError(Exception):
 class ChangeError(Exception):
     pass
 
+class NoteError(Exception):
+    pass
 
 def input_error(func):
     @wraps(func)
@@ -45,5 +47,7 @@ def input_error(func):
             change <name> <new_phone> -> replaces first phone or adds if none
             change <name> <old_phone> <new_phone>
         """).strip()
+        except NoteError as e:
+            return e.args[0]
 
     return inner

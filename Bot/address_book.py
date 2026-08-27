@@ -1,7 +1,7 @@
 from collections import UserDict
 from datetime import datetime
 
-from decorators import BirthdayError, PhoneError
+from decorators import BirthdayError, PhoneError, NoteError
 from email_validator import EmailNotValidError, validate_email
 
 
@@ -72,7 +72,8 @@ class Record:
         phones: {"; ".join(p.value for p in self.phones)},
         birthday: {self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"}
         e-mail: {self.email.value if self.email else "N/A"},
-        address: {self.address.value if self.address else "N/A"}"""
+        address: {self.address.value if self.address else "N/A"}
+        notes: {"; ".join(f"{note_id}: {note.value}" for note_id, note in self.notes.items()) if self.notes else "N/A"}"""
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -110,7 +111,7 @@ class Record:
     def edit_note(self, old, new_text):
         old_note = self.find_note_id(old)
         if not old_note:
-            raise ValueError('No note with such id')
+            raise NoteError('No note with such id')
         new_note = Note(new_text, old)
         self.notes[old] = new_note
 
@@ -128,7 +129,7 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-            
+
     def find_notes(self,word):
         notes = []
         for record in self.data.values():            
