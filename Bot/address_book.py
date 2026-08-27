@@ -51,6 +51,11 @@ class Birthday(Field):
             raise BirthdayError("Invalid date format. Use DD.MM.YYYY")
         super().__init__(birthday_date)
 
+class Note(Field):
+    def __init__(self, note, c_id):
+        self.value = note
+        self.c_id = c_id
+
 
 class Record:
     def __init__(self, name):
@@ -59,6 +64,8 @@ class Record:
         self.birthday = None
         self.email = None
         self.address = None
+        self.notes = {}
+        self.next_note_id = 0
 
     def __str__(self):
         return f"""Contact name: {self.name.value},
@@ -91,6 +98,25 @@ class Record:
     def add_address(self, address):
         self.address = Address(address)
 
+    def add_note(self, text):
+        new_id = self.next_note_id + 1
+        note = Note(text, new_id)
+        self.notes[new_id] = note
+        self.next_note_id += 1
+
+    def find_note_id(self,c_id):
+        return self.notes.get(c_id)
+
+    def edit_note(self, old, new_text):
+        old_note = self.find_note_id(old)
+        if not old_note:
+            raise ValueError('No note with such id')
+        new_note = Note(new_text, old)
+        self.notes[old] = new_note
+
+    def delete_note(self, c_id):
+        self.notes.pop(c_id, None)
+
 
 class AddressBook(UserDict):
     def add_record(self, record):
@@ -102,6 +128,14 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
+            
+    def find_notes(self,word):
+        notes = []
+        for record in self.data.values():            
+            for note in record.notes.values():
+                if word.lower() in note.value.lower():
+                    notes.append((record.name.value,note))
+        return notes
 
     def get_upcoming_birthdays(self, days_after=None):
         today = datetime.today().date()

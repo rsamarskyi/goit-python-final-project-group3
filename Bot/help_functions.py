@@ -209,3 +209,60 @@ def load_data(filename="addressbook.pkl"):
             return pickle.load(f)
     except FileNotFoundError:
         return AddressBook()
+
+
+@input_error
+def add_note(args, book):
+    name, *note_words= args
+    note = ' '.join(note_words)
+    record = book.find(name)
+    if record is None:
+        return "Contact not found."
+    if not note_words:
+        return "Note must not be empty"
+    record.add_note(note)
+    return "Note added."
+
+@input_error
+def delete_note(args, book):
+    name, note_id = args
+    note_id = int(note_id)
+    record = book.find(name)
+    if record is None:
+        return "Contact not found."
+    record.delete_note(note_id)
+    return "Note deleted"
+
+@input_error
+def edit_note(args, book):
+    name, note_id, *note_words= args
+    note_id = int(note_id)
+    note = ' '.join(note_words)
+    record = book.find(name)
+    if record is None:
+        return "Contact not found."
+    if not note_words:
+        return"Note must not be empty"
+    record.edit_note(note_id, note)
+    return "Note updated"
+@input_error
+
+def search_note_by_id(args, book):
+    name, note_id = args
+    note_id = int(note_id)
+    record = book.find(name)
+    if not record:
+        return "Contact not found."
+    note = record.find_note_id(note_id)
+    if note is None:
+        return "No note with such id"
+    return str(note)
+
+@input_error
+def search_notes(args, book):
+    words = args
+    search_phrase = ' '.join(words)
+    result = book.find_note(search_phrase)
+    if not result:
+        return "No notes found"
+    return "\n".join(f"{name}: {note}" for name, note in result)
