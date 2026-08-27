@@ -98,38 +98,41 @@ def delete_contact(args, book: AddressBook):
 
 @input_error
 def edit_contact(args, book: AddressBook):
-    if len(args) < 3:
-        return "Please provide name, field and new value, for example: edit Alice -phone 0123456789."
+    if len(args) !=1:
+        return "Please provide a contact name you want to edit."
 
-    name, field = args[0], args[1].lower()
-    if field not in {"-phone", "-birthday", "-email", "-address"}:
-        return "Field must be -phone, -birthday, -email or -address."
+    name = args[0].capitalize()
 
     record = book.find(name.capitalize())
     if not record:
         return "Contact not found."
-
-    if field == "-phone":
-        if len(args) != 4 or not args[2] or not args[3]:
-            return "Use: edit Alice -phone <old value> <new value>."
-        old_phone, new_phone = args[2], args[3]
-        if not record.find_phone(old_phone):
-            return "Old phone number not found. Nothing was changed."
-        record.edit_phone(old_phone, new_phone)
-        return "Contact updated."
-
-    new_value = " ".join(args[2:]).strip()
-    if not new_value:
-        return "New value cannot be empty. Nothing was changed."
-
-    if field == "-birthday":
-        record.add_birthday(new_value)
-    elif field == "-email":
-        record.add_email(new_value)
     else:
-        record.add_address(new_value)
-
-    return "Contact updated."
+        message = "Contact updated."
+    
+        add_contact_email = input(
+            BOT_ANSWER_COLOR + " Change e-mail? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_email.lower() == "y":
+            email = input(BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL)
+            record.add_email(email)
+    
+        add_contact_address = input(
+            BOT_ANSWER_COLOR + " Change address? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_address.lower() == "y":
+            address = input(BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL)
+            record.add_address(address)
+    
+        add_contact_birthday = input(
+            BOT_ANSWER_COLOR + " Change birthday? (y/n): " + Style.RESET_ALL
+        )
+        if add_contact_birthday.lower() == "y":
+            birthday = input(
+                BOT_ANSWER_COLOR + "  Enter birthday (DD.MM.YYYY): " + Style.RESET_ALL
+            )
+            record.add_birthday(birthday)
+    
+        return message
 
 
 @input_error
