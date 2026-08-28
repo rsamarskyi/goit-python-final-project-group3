@@ -1,6 +1,7 @@
 import pickle
 
-from address_book import AddressBook, Record, NoteBook
+from address_book import AddressBook, Record
+from notebook import NoteBook
 from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
@@ -226,6 +227,8 @@ def load_notebook(filename="notebook.pkl"):
 
 @input_error
 def add_note(args, notebook):
+    if not args:
+        return "Please provide a title for the note."
     title, *note_words = args
     note = " ".join(note_words)
     if not note_words:
@@ -238,6 +241,8 @@ def add_note(args, notebook):
 
 @input_error
 def edit_note(args, notebook):
+    if not args:
+        return "Please specify which note to edit."
     title, *note_words = args
     note = " ".join(note_words)
     existing_note = notebook.find(title)
@@ -250,6 +255,8 @@ def edit_note(args, notebook):
 
 @input_error
 def delete_note(args, notebook):
+    if not args:
+        return "Please provide a title for the note."
     title = args[0]
     existing_note = notebook.find(title)
     if existing_note is None:

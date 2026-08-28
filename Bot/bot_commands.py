@@ -37,5 +37,35 @@ BOT_COMMANDS_LIST = [
         "description": "Add address for a contact",
     },
     {"name": "all", "usage": "all", "description": "Show all contacts"},
+    {
+        "name": "add-note",
+        "usage": "add-note <title> <text>",
+        "description": "Add a new note",
+    },
+    {
+        "name": "edit-note",
+        "usage": "edit-note <title> <new_text>",
+        "description": "Edit an existing note by title",
+    },
+    {
+        "name": "delete-note",
+        "usage": "delete-note <title>",
+        "description": "Delete a note by title",
+    },
+    {
+        "name": "search-title",
+        "usage": "search-title <title>",
+        "description": "Show a note by title",
+    },
+    {
+        "name": "search-notes",
+        "usage": "search-notes <word>",
+        "description": "Search notes by word",
+    },
+    {
+        "name": "all-notes",
+        "usage": "all-notes",
+        "description": "Show all notes",
+    },
     {"name": "close or exit", "usage": "close", "description": "Close the application"},
 ]
