@@ -2,7 +2,11 @@ from collections import UserDict
 from datetime import datetime
 
 from decorators import BirthdayError, PhoneError, NoteError
+from colorama import Fore, Styler
 from email_validator import EmailNotValidError, validate_email
+
+CONTACT_COLOR = Fore.LIGHTWHITE_EX + Style.BRIGHT
+TEXT_COLOR = Fore.LIGHTMAGENTA_EX + Style.DIM
 
 
 class Field:
@@ -92,10 +96,10 @@ class Record:
 
     def __str__(self):
         return f"""Contact name: {self.name.value},
-        phones: {"; ".join(p.value for p in self.phones)},
-        birthday: {self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"}
-        e-mail: {self.email.value if self.email else "N/A"},
-        address: {self.address.value if self.address else "N/A"}"""
+        {CONTACT_COLOR} phones {Style.RESET_ALL}: {TEXT_COLOR + "; ".join(p.value for p in self.phones) + Style.RESET_ALL},
+        {CONTACT_COLOR} birthday{Style.RESET_ALL}: {TEXT_COLOR + self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"}{Style.RESET_ALL},
+        {CONTACT_COLOR} e-mail{Style.RESET_ALL}: {TEXT_COLOR + self.email.value if self.email else "N/A"}{Style.RESET_ALL},
+        {CONTACT_COLOR} address{Style.RESET_ALL}: {TEXT_COLOR + self.address.value if self.address else "N/A"}{Style.RESET_ALL}"""
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))

@@ -1,8 +1,10 @@
 import pickle
 
 from address_book import AddressBook, Record, NoteBook
+from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
+from tabulate import tabulate
 
 # Initialization colorama
 just_fix_windows_console()
@@ -279,3 +281,6 @@ def print_all_notes(notebook: NoteBook):
         return
     for note in notebook.values():
         print(f"{note.title}: {note.value}")
+
+def print_all_commands():
+    print(tabulate(BOT_COMMANDS_LIST, headers="keys"))
