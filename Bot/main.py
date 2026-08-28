@@ -11,17 +11,18 @@ from help_functions import (
     edit_note,
     find_contact,
     load_data,
+    load_notebook,
     parse_input,
     print_all_commands,
     print_all_contacts,
+    print_all_notes,
     save_data,
+    save_notebook,
     search_note_by_title,
     search_notes,
+    search_tag,
     show_birthday,
     show_phone,
-    save_notebook,
-    load_notebook,
-    print_all_notes
 )
 
 # Initialisation colorama
@@ -81,9 +82,15 @@ def main() -> None:
             case "delete-note":
                 print(BOT_ANSWER_COLOR + delete_note(args, notebook) + Style.RESET_ALL)
             case "search-title":
-                print(BOT_ANSWER_COLOR + search_note_by_title(args, notebook) + Style.RESET_ALL)
+                print(
+                    BOT_ANSWER_COLOR
+                    + search_note_by_title(args, notebook)
+                    + Style.RESET_ALL
+                )
             case "search-notes":
                 print(BOT_ANSWER_COLOR + search_notes(args, notebook) + Style.RESET_ALL)
+            case "search-tag":
+                print(BOT_ANSWER_COLOR + search_tag(args, notebook) + Style.RESET_ALL)
             case "all-notes":
                 print_all_notes(notebook)
             case _:

@@ -1,10 +1,10 @@
 import pickle
 
 from address_book import AddressBook, Record
-from notebook import NoteBook
 from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
+from notebook import NoteBook
 from tabulate import tabulate
 
 # Initialization colorama
@@ -213,6 +213,7 @@ def load_data(filename="addressbook.pkl"):
     except FileNotFoundError:
         return AddressBook()
 
+
 def save_notebook(notebook, filename="notebook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(notebook, f)
@@ -225,6 +226,7 @@ def load_notebook(filename="notebook.pkl"):
     except FileNotFoundError:
         return NoteBook()
 
+
 @input_error
 def add_note(args, notebook):
     if not args:
@@ -235,9 +237,10 @@ def add_note(args, notebook):
         return "Note must not be empty."
     if notebook.find(title):
         return "Note with this title already exists."
-    
+
     notebook.add_note(title, note)
     return "Note added."
+
 
 @input_error
 def edit_note(args, notebook):
@@ -252,6 +255,7 @@ def edit_note(args, notebook):
         return "Note must not be empty."
     notebook.edit_note(title, note)
     return "Note updated."
+
 
 @input_error
 def delete_note(args, notebook):
@@ -280,14 +284,27 @@ def search_notes(args, notebook):
     result = notebook.search_note(search_phrase)
     if not result:
         return "No notes found."
-    return "\n".join(f"{note.title}: {note.value}" for note in result)
+    return "\n".join(str(note) for note in result)
+
+
+@input_error
+def search_tag(args, notebook):
+    if not args:
+        return "Please provide a tag to search for."
+    tag = args[0] if not args[0].startswith("#") else args[0][1:]
+    result = notebook.search_tag(tag)
+    if not result:
+        return "No notes found with this tag."
+    return "\n".join(str(note) for note in result)
+
 
 def print_all_notes(notebook: NoteBook):
     if len(notebook) == 0:
         print("No notes found.")
         return
     for note in notebook.values():
-        print(f"{note.title}: {note.value}")
+        print(note)
+
 
 def print_all_commands():
     print(tabulate(BOT_COMMANDS_LIST, headers="keys"))

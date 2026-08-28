@@ -58,6 +58,11 @@ BOT_COMMANDS_LIST = [
         "description": "Show a note by title",
     },
     {
+        "name": "search-tag",
+        "usage": "search-tag <tag>",
+        "description": "Search notes by tag",
+    },
+    {
         "name": "search-notes",
         "usage": "search-notes <word>",
         "description": "Search notes by word",
