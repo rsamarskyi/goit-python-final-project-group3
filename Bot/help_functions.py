@@ -1,9 +1,11 @@
 import pickle
 
 from address_book import AddressBook, Record
+from notebook import NoteBook
+from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import input_error
-
+from tabulate import tabulate
 # Initialization colorama
 just_fix_windows_console()
 
@@ -252,3 +254,82 @@ def load_data(filename="addressbook.pkl"):
             return pickle.load(f)
     except FileNotFoundError:
         return AddressBook()
+
+def save_notebook(notebook, filename="notebook.pkl"):
+    with open(filename, "wb") as f:
+        pickle.dump(notebook, f)
+
+
+def load_notebook(filename="notebook.pkl"):
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return NoteBook()
+
+@input_error
+def add_note(args, notebook):
+    if not args:
+        return "Please provide a title for the note."
+    title, *note_words = args
+    note = " ".join(note_words)
+    if not note_words:
+        return "Note must not be empty."
+    if notebook.find(title):
+        return "Note with this title already exists."
+    
+    notebook.add_note(title, note)
+    return "Note added."
+
+@input_error
+def edit_note(args, notebook):
+    if not args:
+        return "Please specify which note to edit."
+    title, *note_words = args
+    note = " ".join(note_words)
+    existing_note = notebook.find(title)
+    if existing_note is None:
+        return "No note with such title"
+    if not note_words:
+        return "Note must not be empty."
+    notebook.edit_note(title, note)
+    return "Note updated."
+
+@input_error
+def delete_note(args, notebook):
+    if not args:
+        return "Please provide a title for the note."
+    title = args[0]
+    existing_note = notebook.find(title)
+    if existing_note is None:
+        return "No notes with such title"
+    notebook.delete_note(title)
+    return "Note deleted."
+
+
+@input_error
+def search_note_by_title(args, notebook):
+    title = args[0]
+    note = notebook.find(title)
+    if note is None:
+        return "No note with such title."
+    return str(note)
+
+
+@input_error
+def search_notes(args, notebook):
+    search_phrase = " ".join(args)
+    result = notebook.search_note(search_phrase)
+    if not result:
+        return "No notes found."
+    return "\n".join(f"{note.title}: {note.value}" for note in result)
+
+def print_all_notes(notebook: NoteBook):
+    if len(notebook) == 0:
+        print("No notes found.")
+        return
+    for note in notebook.values():
+        print(f"{note.title}: {note.value}")
+
+def print_all_commands():
+    print(tabulate(BOT_COMMANDS_LIST, headers="keys"))

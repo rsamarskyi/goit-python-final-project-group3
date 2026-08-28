@@ -4,17 +4,25 @@ from help_functions import (
     add_birthday,
     add_contact,
     add_email,
+    add_note,
     birthdays,
-    change_contact,
     delete_contact,
     edit_contact,
+    delete_note,
+    edit_note,
     find_contact,
     load_data,
     parse_input,
+    print_all_commands,
     print_all_contacts,
     save_data,
+    search_note_by_title,
+    search_notes,
     show_birthday,
     show_phone,
+    save_notebook,
+    load_notebook,
+    print_all_notes
 )
 
 # Initialisation colorama
@@ -26,17 +34,23 @@ BOT_ANSWER_COLOR = "  - " + Fore.LIGHTRED_EX + Style.BRIGHT
 
 def main() -> None:
     book = load_data()
+    notebook = load_notebook()
     print(BOT_SHELL_COLOR + "Hello, I am a console assistant!")
 
     while True:
         command, *args = parse_input(
-            input(BOT_SHELL_COLOR + "Enter a command: " + Style.RESET_ALL)
+            input(
+                BOT_SHELL_COLOR + "Enter a command (or type <help>): " + Style.RESET_ALL
+            )
         )
         match command:
             case "close" | "exit":
                 print(BOT_ANSWER_COLOR + "Good bye!" + Style.RESET_ALL)
                 save_data(book)
+                save_notebook(notebook)
                 break
+            case "help":
+                print_all_commands()
             case "hello":
                 print(BOT_ANSWER_COLOR + "How can I help you?" + Style.RESET_ALL)
             case "add":
@@ -63,6 +77,18 @@ def main() -> None:
                 if len(book):
                     print(BOT_ANSWER_COLOR + "All contacts:" + Style.RESET_ALL)
                 print_all_contacts(book)
+            case "add-note":
+                print(BOT_ANSWER_COLOR + add_note(args, notebook) + Style.RESET_ALL)
+            case "edit-note":
+                print(BOT_ANSWER_COLOR + edit_note(args, notebook) + Style.RESET_ALL)
+            case "delete-note":
+                print(BOT_ANSWER_COLOR + delete_note(args, notebook) + Style.RESET_ALL)
+            case "search-title":
+                print(BOT_ANSWER_COLOR + search_note_by_title(args, notebook) + Style.RESET_ALL)
+            case "search-notes":
+                print(BOT_ANSWER_COLOR + search_notes(args, notebook) + Style.RESET_ALL)
+            case "all-notes":
+                print_all_notes(notebook)
             case _:
                 print(BOT_ANSWER_COLOR + "Invalid command." + Style.RESET_ALL)
 
