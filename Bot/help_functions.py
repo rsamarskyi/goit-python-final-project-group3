@@ -3,10 +3,9 @@ import pickle
 from address_book import AddressBook, Record
 from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
-from decorators import ChangeError, PhoneError, input_error
+from decorators import input_error
 from notebook import NoteBook
 from tabulate import tabulate
-
 # Initialization colorama
 just_fix_windows_console()
 
@@ -27,45 +26,20 @@ def parse_input(user_input):
 def add_contact(args, book: AddressBook):
     name, phone = args
 
-    # Validate phone number length before adding to the record, next validation will be done in the Phone class
-    if len(phone) != 10:
-        raise PhoneError("Phone number must contain exactly 10 digits")
-
-    record = book.find(name.capitalize())
-    message = "Contact updated."
+    name = name.capitalize()
+    record = book.find(name)
 
     if record is None:
-        record = Record(name.capitalize())
+        record = Record(name)
+        record.add_phone(phone)
         book.add_record(record)
-        record.add_phone(phone)
 
-        add_contact_email = input(
-            BOT_ANSWER_COLOR + " Add e-mail? (y/n): " + Style.RESET_ALL
-        )
-        if add_contact_email.lower() == "y":
-            email = input(BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL)
-            record.add_email(email)
+        update_contact_details(record, "Add")
 
-        add_contact_address = input(
-            BOT_ANSWER_COLOR + " Add address? (y/n): " + Style.RESET_ALL
-        )
-        if add_contact_address.lower() == "y":
-            address = input(BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL)
-            record.add_address(address)
+        return "Contact added."
 
-        add_contact_birthday = input(
-            BOT_ANSWER_COLOR + " Add birthday? (y/n): " + Style.RESET_ALL
-        )
-        if add_contact_birthday.lower() == "y":
-            birthday = input(
-                BOT_ANSWER_COLOR + "  Enter birthday (DD.MM.YYYY): " + Style.RESET_ALL
-            )
-            record.add_birthday(birthday)
-
-        message = "Contact added."
-    else:
-        record.add_phone(phone)
-    return message
+    record.add_phone(phone)
+    return "Contact updated."
 
 
 @input_error
@@ -85,6 +59,101 @@ def find_contact(args, book: AddressBook):
         return f"{record}"
     return "Contact not found."
 
+
+@input_error
+def delete_contact(args, book: AddressBook):
+    if len(args) != 1:
+        return "Please provide a contact name, for example: delete Alice."
+
+    name = args[0].capitalize()
+    if not book.find(name):
+        return "Contact not found."
+
+    book.delete(name)
+    return "Contact deleted."
+
+
+@input_error
+def edit_contact(args, book: AddressBook):
+    if len(args) != 1:
+        return "Please provide a contact name you want to edit."
+
+    name = args[0].capitalize()
+    record = book.find(name)
+
+    if not record:
+        return "Contact not found."
+
+    update_contact_details(record, "Change")
+
+    return "Contact updated."
+
+def update_contact_details(record, action="Add"):
+    if action == "Change":
+        phone_answer = input(
+            BOT_ANSWER_COLOR + " Change phone? (y/n): " + Style.RESET_ALL
+        )
+
+        if phone_answer.casefold() == "y":
+            if record.phones:
+                print(
+                    BOT_ANSWER_COLOR
+                    + "  Current phones: "
+                    + ", ".join(str(phone) for phone in record.phones)
+                    + Style.RESET_ALL
+                )
+
+            old_phone = input(
+                BOT_ANSWER_COLOR
+                + "  Enter the phone to change, or press Enter to add a new phone: "
+                + Style.RESET_ALL
+            )
+
+            new_phone = input(
+                BOT_ANSWER_COLOR
+                + "  Enter new phone: "
+                + Style.RESET_ALL
+            )
+
+            update_phone(record, new_phone, old_phone or None)
+
+    email_answer = input(
+        BOT_ANSWER_COLOR + f" {action} e-mail? (y/n): " + Style.RESET_ALL
+    )
+    if email_answer.casefold() == "y":
+        email = input(
+            BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL
+        )
+        record.add_email(email)
+
+    address_answer = input(
+        BOT_ANSWER_COLOR + f" {action} address? (y/n): " + Style.RESET_ALL
+    )
+    if address_answer.casefold() == "y":
+        address = input(
+            BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL
+        )
+        record.add_address(address)
+
+    birthday_answer = input(
+        BOT_ANSWER_COLOR + f" {action} birthday? (y/n): " + Style.RESET_ALL
+    )
+    if birthday_answer.casefold() == "y":
+        birthday = input(
+            BOT_ANSWER_COLOR
+            + "  Enter birthday (DD.MM.YYYY): "
+            + Style.RESET_ALL
+        )
+        record.add_birthday(birthday)
+
+# Replaces an existing phone if old_phone is provided,
+# otherwise adds a new phone.
+def update_phone(record, new_phone, old_phone=None):
+
+    if old_phone:
+        record.edit_phone(old_phone, new_phone)
+    else:
+        record.add_phone(new_phone)
 
 @input_error
 def add_birthday(args, book):
@@ -146,33 +215,6 @@ def print_all_contacts(book: AddressBook):
         return
     for record in book.values():
         print(BOT_ANSWER_PREFIX + BOT_ANSWER_COLOR + str(record) + Style.RESET_ALL)
-
-
-@input_error
-def change_contact(args, book: AddressBook):
-    # Supports two forms:
-    #   change <name> <new_phone> -> replaces first phone or adds if none
-    #   change <name> <old_phone> <new_phone>
-    if len(args) == 2:
-        name, new_phone = args
-        record = book.find(name.capitalize())
-        if record:
-            if record.phones:
-                old_phone = record.phones[0].value
-                record.edit_phone(old_phone, new_phone)
-            else:
-                record.add_phone(new_phone)
-            return "Contact updated."
-        return "Contact not found."
-    elif len(args) == 3:
-        name, old_phone, new_phone = args
-        record = book.find(name.capitalize())
-        if record:
-            record.edit_phone(old_phone, new_phone)
-            return "Contact updated."
-        return "Contact not found."
-    else:
-        raise ChangeError()
 
 
 @input_error
