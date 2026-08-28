@@ -95,8 +95,7 @@ class Record:
         phones: {"; ".join(p.value for p in self.phones)},
         birthday: {self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"}
         e-mail: {self.email.value if self.email else "N/A"},
-        address: {self.address.value if self.address else "N/A"}
-        notes: {"; ".join(f"{note_id}: {note.value}" for note_id, note in self.notes.items()) if self.notes else "N/A"}"""
+        address: {self.address.value if self.address else "N/A"}"""
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))

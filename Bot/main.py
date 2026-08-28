@@ -75,7 +75,7 @@ def main() -> None:
                 print(BOT_ANSWER_COLOR + edit_note(args, notebook) + Style.RESET_ALL)
             case "delete-note":
                 print(BOT_ANSWER_COLOR + delete_note(args, notebook) + Style.RESET_ALL)
-            case "search-note":
+            case "search-title":
                 print(BOT_ANSWER_COLOR + search_note_by_title(args, notebook) + Style.RESET_ALL)
             case "search-notes":
                 print(BOT_ANSWER_COLOR + search_notes(args, notebook) + Style.RESET_ALL)
