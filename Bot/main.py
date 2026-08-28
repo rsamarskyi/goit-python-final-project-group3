@@ -12,6 +12,7 @@ from help_functions import (
     find_contact,
     load_data,
     parse_input,
+    print_all_commands,
     print_all_contacts,
     save_data,
     search_note_by_title,
@@ -37,7 +38,9 @@ def main() -> None:
 
     while True:
         command, *args = parse_input(
-            input(BOT_SHELL_COLOR + "Enter a command: " + Style.RESET_ALL)
+            input(
+                BOT_SHELL_COLOR + "Enter a command (or type <help>): " + Style.RESET_ALL
+            )
         )
         match command:
             case "close" | "exit":
@@ -45,6 +48,8 @@ def main() -> None:
                 save_data(book)
                 save_notebook(notebook)
                 break
+            case "help":
+                print_all_commands()
             case "hello":
                 print(BOT_ANSWER_COLOR + "How can I help you?" + Style.RESET_ALL)
             case "add":
