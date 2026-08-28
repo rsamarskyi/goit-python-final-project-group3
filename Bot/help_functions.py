@@ -264,7 +264,7 @@ def search_note_by_title(args, notebook):
     note = notebook.find(title)
     if note is None:
         return "No note with such title."
-    return f"{note.title}: {note.value}"
+    return str(note)
 
 
 @input_error

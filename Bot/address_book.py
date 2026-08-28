@@ -2,7 +2,7 @@ from collections import UserDict
 from datetime import datetime
 
 from decorators import BirthdayError, PhoneError, NoteError
-from colorama import Fore, Styler
+from colorama import Fore, Style
 from email_validator import EmailNotValidError, validate_email
 
 CONTACT_COLOR = Fore.LIGHTWHITE_EX + Style.BRIGHT
