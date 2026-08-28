@@ -1,6 +1,6 @@
 import pickle
 
-from address_book import AddressBook, Record
+from address_book import AddressBook, Record, NoteBook
 from colorama import Fore, Style, just_fix_windows_console
 from decorators import ChangeError, PhoneError, input_error
 
@@ -210,62 +210,72 @@ def load_data(filename="addressbook.pkl"):
     except FileNotFoundError:
         return AddressBook()
 
+def save_notebook(notebook, filename="notebook.pkl"):
+    with open(filename, "wb") as f:
+        pickle.dump(notebook, f)
+
+
+def load_notebook(filename="notebook.pkl"):
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return NoteBook()
 
 @input_error
-def add_note(args, book):
-    name, *note_words = args
+def add_note(args, notebook):
+    title, *note_words = args
     note = " ".join(note_words)
-    record = book.find(name.capitalize())
-    if record is None:
-        return "Contact not found."
     if not note_words:
         return "Note must not be empty."
-    record.add_note(note)
+    if notebook.find(title):
+        return "Note with this title already exists."
+    
+    notebook.add_note(title, note)
     return "Note added."
 
+@input_error
+def edit_note(args, notebook):
+    title, *note_words = args
+    note = " ".join(note_words)
+    existing_note = notebook.find(title)
+    if existing_note is None:
+        return "No note with such title"
+    if not note_words:
+        return "Note must not be empty."
+    notebook.edit_note(title, note)
+    return "Note updated."
 
 @input_error
-def delete_note(args, book):
-    name, note_id = args
-    note_id = int(note_id)
-    record = book.find(name.capitalize())
-    if record is None:
-        return "Contact not found."
-    record.delete_note(note_id)
+def delete_note(args, notebook):
+    title = args[0]
+    existing_note = notebook.find(title)
+    if existing_note is None:
+        return "No notes with such title"
+    notebook.delete_note(title)
     return "Note deleted."
 
 
 @input_error
-def edit_note(args, book):
-    name, note_id, *note_words = args
-    note_id = int(note_id)
-    note = " ".join(note_words)
-    record = book.find(name.capitalize())
-    if record is None:
-        return "Contact not found."
-    if not note_words:
-        return "Note must not be empty."
-    record.edit_note(note_id, note)
-    return "Note updated."
-
-
-@input_error
-def search_note_by_id(args, book):
-    name, note_id = args
-    note_id = int(note_id)
-    record = book.find(name.capitalize())
-    if not record:
-        return "Contact not found."
-    note = record.find_note_id(note_id)
+def search_note_by_title(args, notebook):
+    title = args[0]
+    note = notebook.find(title)
     if note is None:
-        return "No note with such id."
+        return "No note with such title."
     return str(note)
 
 
 @input_error
-def search_notes(args, book):
+def search_notes(args, notebook):
     search_phrase = " ".join(args)
-    result = book.find_notes(search_phrase)
+    result = notebook.search_note(search_phrase)
     if not result:
         return "No notes found."
-    return "\n".join(f"{name}: {note}" for name, note in result)
+    return "\n".join(f"{note.title}: {note.value}" for note in result)
+
+def print_all_notes(notebook: NoteBook):
+    if len(notebook) == 0:
+        print("No notes found.")
+        return
+    for note in notebook.values():
+        print(f"{note.title}: {note.value}")

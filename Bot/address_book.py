@@ -76,7 +76,7 @@ class NoteBook(UserDict):
         notes = []
         for note in self.data.values():
             if search_p.lower() in note.value.lower():
-                notes.append({ "title": note.title, "text": note.value})
+                notes.append(note)
         return notes
 
     def delete_note(self, title):
@@ -122,26 +122,6 @@ class Record:
     def add_address(self, address):
         self.address = Address(address)
 
-    def add_note(self, text):
-        new_id = self.next_note_id + 1
-        note = Note(text, new_id)
-        self.notes[new_id] = note
-        self.next_note_id += 1
-
-    def find_note_id(self,c_id):
-        return self.notes.get(c_id)
-
-    def edit_note(self, old, new_text):
-        old_note = self.find_note_id(old)
-        if not old_note:
-            raise NoteError('No note with such id')
-        new_note = Note(new_text, old)
-        self.notes[old] = new_note
-
-    def delete_note(self, c_id):
-        self.notes.pop(c_id, None)
-
-
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -152,14 +132,6 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-
-    def find_notes(self,word):
-        notes = []
-        for record in self.data.values():            
-            for note in record.notes.values():
-                if word.lower() in note.value.lower():
-                    notes.append((record.name.value,note))
-        return notes
 
     def get_upcoming_birthdays(self, days_after=None):
         today = datetime.today().date()
