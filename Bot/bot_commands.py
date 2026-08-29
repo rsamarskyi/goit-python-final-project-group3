@@ -2,7 +2,7 @@ BOT_COMMANDS_LIST = [
     {"name": "add", "usage": "add <name> <phone>", "description": "Add a new contact"},
     {
         "name": "edit",
-        "usage": "change <name>",
+        "usage": "edit <name>",
         "description": "Add/change phone, e-mail, address, birthday to a contact",
     },
     {"name": "find", "usage": "find <name>", "description": "Find a contact"},
