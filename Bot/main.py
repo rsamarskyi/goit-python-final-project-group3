@@ -1,9 +1,6 @@
 from colorama import Fore, Style, just_fix_windows_console
 from help_functions import (
-    add_address,
-    add_birthday,
     add_contact,
-    add_email,
     add_note,
     birthdays,
     delete_contact,
@@ -22,8 +19,6 @@ from help_functions import (
     search_note_by_title,
     search_notes,
     search_tag,
-    show_birthday,
-    show_phone,
 )
 
 # Initialisation colorama
@@ -56,24 +51,14 @@ def main() -> None:
                 print(BOT_ANSWER_COLOR + "How can I help you?" + Style.RESET_ALL)
             case "add":
                 print(BOT_ANSWER_COLOR + add_contact(args, book) + Style.RESET_ALL)
-            case "phone":
-                print(BOT_ANSWER_COLOR + show_phone(args, book) + Style.RESET_ALL)
             case "find":
                 print(BOT_ANSWER_COLOR + find_contact(args, book) + Style.RESET_ALL)
             case "delete":
                 print(BOT_ANSWER_COLOR + delete_contact(args, book) + Style.RESET_ALL)
             case "edit":
                 print(BOT_ANSWER_COLOR + edit_contact(args, book) + Style.RESET_ALL)
-            case "add-birthday":
-                print(BOT_ANSWER_COLOR + add_birthday(args, book) + Style.RESET_ALL)
-            case "show-birthday":
-                print(BOT_ANSWER_COLOR + show_birthday(args, book) + Style.RESET_ALL)
             case "birthdays":
                 print(BOT_ANSWER_COLOR + birthdays(args, book) + Style.RESET_ALL)
-            case "email":
-                print(BOT_ANSWER_COLOR + add_email(args, book) + Style.RESET_ALL)
-            case "address":
-                print(BOT_ANSWER_COLOR + add_address(args, book) + Style.RESET_ALL)
             case "all":
                 if len(book):
                     print(BOT_ANSWER_COLOR + "All contacts:" + Style.RESET_ALL)
