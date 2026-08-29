@@ -1,5 +1,6 @@
 from colorama import Fore, Style, just_fix_windows_console
-from help_functions import (
+
+from .help_functions import (
     add_contact,
     add_note,
     birthdays,

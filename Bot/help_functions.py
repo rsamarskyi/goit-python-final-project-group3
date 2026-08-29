@@ -1,11 +1,12 @@
 import pickle
 
-from address_book import AddressBook, Record
-from bot_commands import BOT_COMMANDS_LIST
 from colorama import Fore, Style, just_fix_windows_console
-from decorators import input_error
-from notebook import NoteBook
 from tabulate import tabulate
+
+from .address_book import AddressBook, Record
+from .bot_commands import BOT_COMMANDS_LIST
+from .decorators import input_error
+from .notebook import NoteBook
 
 # Initialization colorama
 just_fix_windows_console()

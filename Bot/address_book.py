@@ -5,6 +5,8 @@ from colorama import Fore, Style
 from decorators import BirthdayError, PhoneError
 from email_validator import EmailNotValidError, validate_email
 
+from .decorators import BirthdayError, PhoneError
+
 CONTACT_COLOR = Fore.LIGHTWHITE_EX + Style.BRIGHT
 TEXT_COLOR = Fore.LIGHTMAGENTA_EX + Style.DIM
 

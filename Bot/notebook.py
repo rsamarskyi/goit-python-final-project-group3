@@ -1,6 +1,6 @@
 from collections import UserDict
 
-from decorators import NoteError
+from .decorators import NoteError
 
 
 class Note:
