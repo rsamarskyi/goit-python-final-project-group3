@@ -1,9 +1,10 @@
 from collections import UserDict
 from datetime import datetime
 
-from decorators import BirthdayError, PhoneError
 from colorama import Fore, Style
 from email_validator import EmailNotValidError, validate_email
+
+from .decorators import BirthdayError, PhoneError
 
 CONTACT_COLOR = Fore.LIGHTWHITE_EX + Style.BRIGHT
 TEXT_COLOR = Fore.LIGHTMAGENTA_EX + Style.DIM
@@ -94,6 +95,7 @@ class Record:
 
     def add_address(self, address):
         self.address = Address(address)
+
 
 class AddressBook(UserDict):
     def add_record(self, record):
