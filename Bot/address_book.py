@@ -2,7 +2,7 @@ from collections import UserDict
 from datetime import datetime
 
 from colorama import Fore, Style
-from decorators import BirthdayError, PhoneError
+from .decorators import BirthdayError, PhoneError
 from email_validator import EmailNotValidError, validate_email
 
 from .decorators import BirthdayError, PhoneError

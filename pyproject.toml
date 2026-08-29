@@ -7,7 +7,7 @@ name = "Bot"
 version = "0.1.0"
 description = "A simple bot helper to manage your address book and notes."
 readme = "README.md"
-python_requires = ">=3.10"
+requires-python = ">=3.10"
 
 dependencies = [
     "cfgv==3.5.0",
