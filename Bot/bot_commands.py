@@ -5,7 +5,11 @@ BOT_COMMANDS_LIST = [
         "usage": "edit <name>",
         "description": "Add/change phone, e-mail, address, birthday to a contact",
     },
-    {"name": "find", "usage": "find <name>", "description": "Find a contact"},
+    {
+        "name": "find",
+        "usage": "find <name> or <phone> or <email>",
+        "description": "Find a contact by name or phone or email",
+    },
     {
         "name": "birthdays",
         "usage": "birthdays <days_after>",
@@ -15,7 +19,7 @@ BOT_COMMANDS_LIST = [
         "name": "delete",
         "usage": "delete <name>",
         "description": "Delete contact from address book",
-        },
+    },
     {"name": "all", "usage": "all", "description": "Show all contacts"},
     {
         "name": "add-note",

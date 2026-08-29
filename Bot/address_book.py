@@ -2,6 +2,7 @@ from collections import UserDict
 from datetime import datetime
 
 from colorama import Fore, Style
+from decorators import BirthdayError, PhoneError
 from email_validator import EmailNotValidError, validate_email
 
 from .decorators import BirthdayError, PhoneError
@@ -103,6 +104,18 @@ class AddressBook(UserDict):
 
     def find(self, name):
         return self.data.get(name)
+
+    def find_by_phone(self, phone):
+        for record in self.data.values():
+            if record.find_phone(phone):
+                return record
+        return "Contact not found"
+
+    def find_by_email(self, email):
+        for record in self.data.values():
+            if record.email and record.email.value.casefold() == email.casefold():
+                return record
+        return "Contact not found"
 
     def delete(self, name):
         if name in self.data:

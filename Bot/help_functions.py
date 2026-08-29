@@ -50,6 +50,10 @@ def find_contact(args, book: AddressBook):
     record = book.find(name.capitalize())
     if record:
         return f"{record}"
+    elif args[0].isdigit():
+        return f"{book.find_by_phone(args[0])}"
+    elif "@" in args[0]:
+        return f"{book.find_by_email(args[0])}"
     return "Contact not found."
 
 
