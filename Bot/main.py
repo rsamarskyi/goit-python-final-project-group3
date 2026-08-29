@@ -1,11 +1,12 @@
 from colorama import Fore, Style, just_fix_windows_console
-from help_functions import (
+
+from .help_functions import (
     add_contact,
     add_note,
     birthdays,
     delete_contact,
-    edit_contact,
     delete_note,
+    edit_contact,
     edit_note,
     find_contact,
     load_data,
