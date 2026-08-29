@@ -1,8 +1,8 @@
 from collections import UserDict
 from datetime import datetime
 
-from decorators import BirthdayError, PhoneError
 from colorama import Fore, Style
+from decorators import BirthdayError, PhoneError
 from email_validator import EmailNotValidError, validate_email
 
 CONTACT_COLOR = Fore.LIGHTWHITE_EX + Style.BRIGHT
@@ -95,12 +95,25 @@ class Record:
     def add_address(self, address):
         self.address = Address(address)
 
+
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
     def find(self, name):
         return self.data.get(name)
+
+    def find_by_phone(self, phone):
+        for record in self.data.values():
+            if record.find_phone(phone):
+                return record
+        return "Contact not found"
+
+    def find_by_email(self, email):
+        for record in self.data.values():
+            if record.email and record.email.value.casefold() == email.casefold():
+                return record
+        return "Contact not found"
 
     def delete(self, name):
         if name in self.data:

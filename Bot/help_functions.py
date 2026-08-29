@@ -6,6 +6,7 @@ from colorama import Fore, Style, just_fix_windows_console
 from decorators import input_error
 from notebook import NoteBook
 from tabulate import tabulate
+
 # Initialization colorama
 just_fix_windows_console()
 
@@ -48,6 +49,10 @@ def find_contact(args, book: AddressBook):
     record = book.find(name.capitalize())
     if record:
         return f"{record}"
+    elif args[0].isdigit():
+        return f"{book.find_by_phone(args[0])}"
+    elif "@" in args[0]:
+        return f"{book.find_by_email(args[0])}"
     return "Contact not found."
 
 
@@ -79,6 +84,7 @@ def edit_contact(args, book: AddressBook):
 
     return "Contact updated."
 
+
 def update_contact_details(record, action="Add"):
     if action == "Change":
         phone_answer = input(
@@ -101,9 +107,7 @@ def update_contact_details(record, action="Add"):
             )
 
             new_phone = input(
-                BOT_ANSWER_COLOR
-                + "  Enter new phone: "
-                + Style.RESET_ALL
+                BOT_ANSWER_COLOR + "  Enter new phone: " + Style.RESET_ALL
             )
 
             update_phone(record, new_phone, old_phone or None)
@@ -112,18 +116,14 @@ def update_contact_details(record, action="Add"):
         BOT_ANSWER_COLOR + f" {action} e-mail? (y/n): " + Style.RESET_ALL
     )
     if email_answer.casefold() == "y":
-        email = input(
-            BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL
-        )
+        email = input(BOT_ANSWER_COLOR + "  Enter e-mail: " + Style.RESET_ALL)
         record.add_email(email)
 
     address_answer = input(
         BOT_ANSWER_COLOR + f" {action} address? (y/n): " + Style.RESET_ALL
     )
     if address_answer.casefold() == "y":
-        address = input(
-            BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL
-        )
+        address = input(BOT_ANSWER_COLOR + "  Enter address: " + Style.RESET_ALL)
         record.add_address(address)
 
     birthday_answer = input(
@@ -131,11 +131,10 @@ def update_contact_details(record, action="Add"):
     )
     if birthday_answer.casefold() == "y":
         birthday = input(
-            BOT_ANSWER_COLOR
-            + "  Enter birthday (DD.MM.YYYY): "
-            + Style.RESET_ALL
+            BOT_ANSWER_COLOR + "  Enter birthday (DD.MM.YYYY): " + Style.RESET_ALL
         )
         record.add_birthday(birthday)
+
 
 # Replaces an existing phone if old_phone is provided,
 # otherwise adds a new phone.
@@ -145,6 +144,7 @@ def update_phone(record, new_phone, old_phone=None):
         record.edit_phone(old_phone, new_phone)
     else:
         record.add_phone(new_phone)
+
 
 @input_error
 def add_birthday(args, book):
