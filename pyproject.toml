@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Bot"
+version = "0.1.0"
+description = "A simple bot helper to manage your address book and notes."
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "cfgv==3.5.0",
+    "click==8.4.2",
+    "colorama==0.4.6",
+    "distlib==0.4.3",
+    "dnspython==2.8.0",
+    "email-validator==2.3.0",
+    "filelock==3.32.4",
+    "hatchling==1.32.0",
+    "identify==2.6.19",
+    "idna==3.19",
+    "mypy_extensions==1.1.0",
+    "nodeenv==1.10.0",
+    "packaging==26.3",
+    "pathspec==1.1.1",
+    "platformdirs==4.11.4",
+    "pluggy==1.6.0",
+    "pre_commit==4.6.2",
+    "python-discovery==1.5.3",
+    "pytokens==0.4.1",
+    "PyYAML==6.0.3",
+    "ruff==0.16.4",
+    "tabulate==0.10.0",
+    "tomlkit==0.15.1",
+    "trove-classifiers==2026.6.1.19",
+    "virtualenv==21.7.5"
+]
+
+[project.scripts]
+start-bot= "Bot.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["Bot"]
+
+#ruff used to show linting errors and fix them
+# Usage: run the command in console - 'ruff check --fix'
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+line-length = 88
+indent-width = 4
+target-version = "py310"
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+select = ["E", "F", "I"] # Pycodestyle Errors, Pyflakes, and Isort
+ignore = ["E501"]  # Defer line-length enforcement to Black
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
