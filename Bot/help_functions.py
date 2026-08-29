@@ -43,15 +43,6 @@ def add_contact(args, book: AddressBook):
 
 
 @input_error
-def show_phone(args, book: AddressBook):
-    name = args[0]
-    record = book.find(name.capitalize())
-    if record:
-        return f"{name}: {', '.join(str(phone) for phone in record.phones)}"
-    return "Contact not found."
-
-
-@input_error
 def find_contact(args, book: AddressBook):
     name = args[0]
     record = book.find(name.capitalize())
@@ -165,15 +156,6 @@ def add_birthday(args, book):
         record.add_birthday(birthday)
         return "Birthday added."
     return "Contact not found."
-
-
-@input_error
-def show_birthday(args, book):
-    name = args[0]
-    record = book.find(name.capitalize())
-    if record and record.birthday:
-        return f"{name.capitalize()}'s birthday is {record.birthday.value.date().strftime('%d.%m.%Y')}."
-    return "Contact not found or birthday not specified."
 
 
 @input_error
